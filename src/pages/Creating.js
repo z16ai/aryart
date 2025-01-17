@@ -85,11 +85,18 @@ const Creating = () => {
         
         // Upload to IPFS
         const result = await uploadToIPFS(blob);
+        if (!result) {
+          throw new Error('Upload failed - no result returned');
+        }
         setIpfsResult(result);
         setUploadError(null);
       } catch (uploadErr) {
         console.error('IPFS upload failed:', uploadErr);
-        setUploadError('Failed to upload to IPFS. Image is saved locally.');
+        if (uploadErr.message.includes('Missing configuration')) {
+          setUploadError('Storage configuration error. Please try again later.');
+        } else {
+          setUploadError('Failed to upload to IPFS. Image is saved locally. ' + uploadErr.message);
+        }
       } finally {
         setIsUploading(false);
       }

@@ -1,4 +1,5 @@
 import * as Client from '@web3-storage/w3up-client';
+import { initializeStorage } from './storageService';
 
 // Fisher-Yates shuffle algorithm
 const shuffleArray = (array) => {
@@ -11,22 +12,16 @@ const shuffleArray = (array) => {
 
 export const fetchSpaceImages = async () => {
   try {
-    // Create client and authenticate
-    const client = await Client.create();
-    const loginEmail = process.env.REACT_APP_WEB3_STORAGE_EMAIL;
-    const spaceDID = process.env.REACT_APP_WEB3_STORAGE_SPACE_DID;
+    // Use the shared storage client
+    const client = await initializeStorage();
     
-    if (!loginEmail || !spaceDID) {
-      throw new Error('Missing configuration: email or space DID');
+    if (!client) {
+      throw new Error('Failed to initialize storage client');
     }
 
-    // Login and set space
-    await client.login(loginEmail);
-    await client.setCurrentSpace(spaceDID);
-
-    // Get space and list uploads
-    console.log('Fetching uploads from space:', spaceDID);
+    // Get current space and list uploads
     const space = await client.currentSpace();
+    console.log('Fetching uploads from space:', space.did());
     
     // List all uploads in the space
     console.log('Listing uploads...');
@@ -53,12 +48,11 @@ export const fetchSpaceImages = async () => {
       });
     }
 
-    console.log(`Found ${images.length} images`);
-
-    // Randomly shuffle the images instead of sorting by date
+    // Sort by upload date and shuffle similar dates
+    images.sort((a, b) => b.uploadedAt - a.uploadedAt);
     return shuffleArray(images);
   } catch (error) {
-    console.error('Error fetching space images:', error);
+    console.error('Failed to fetch images:', error);
     throw new Error(`Failed to fetch images: ${error.message}`);
   }
-}
+};

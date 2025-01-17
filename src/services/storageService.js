@@ -16,11 +16,29 @@ const initializeStorage = async () => {
         throw new Error(`Missing environment variables: ${missing.join(', ')}`);
       }
 
-      // Step 1: Create client
+      // Step 1: Create client with persistent storage
       console.log('Creating new storage client...');
-      storageClient = await Client.create();
+      storageClient = await Client.create({ persistent: true });
       
-      // Step 2: Login with email
+      try {
+        // Try to load existing session
+        const session = await storageClient.session();
+        if (session) {
+          console.log('Found existing session');
+          // Verify if the session is still valid for the target space
+          const spaces = await storageClient.spaces();
+          const currentSpace = spaces.find(s => s.did() === spaceDID);
+          if (currentSpace) {
+            await storageClient.setCurrentSpace(spaceDID);
+            console.log('Successfully restored existing session');
+            return storageClient;
+          }
+        }
+      } catch (error) {
+        console.log('No valid session found, proceeding with login');
+      }
+
+      // Step 2: Login with email if no valid session exists
       console.log('Logging in...');
       await storageClient.login(loginEmail);
 
@@ -49,8 +67,8 @@ const initializeStorage = async () => {
     
     return storageClient;
   } catch (error) {
-    console.error('Storage initialization error:', error);
-    throw new Error(`Storage initialization failed: ${error.message}`);
+    console.error('Failed to initialize storage:', error);
+    throw error;
   }
 };
 
