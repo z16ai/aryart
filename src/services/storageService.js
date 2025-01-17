@@ -2,7 +2,7 @@ import * as Client from '@web3-storage/w3up-client';
 
 let storageClient = null;
 
-const initializeStorage = async () => {
+export const initializeStorage = async () => {
   try {
     if (!storageClient) {
       // Check for required environment variables
