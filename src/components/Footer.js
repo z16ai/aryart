@@ -19,16 +19,6 @@ const Footer = () => {
             <h3 className="text-xl font-bold text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/collections" className="text-gray-400 hover:text-primary-400">
-                  Collections
-                </Link>
-              </li>
-              <li>
-                <Link to="/create-collection" className="text-gray-400 hover:text-primary-400">
-                  Create Collection
-                </Link>
-              </li>
-              <li>
                 <Link to="/how-it-works" className="text-gray-400 hover:text-primary-400">
                   How It Works
                 </Link>
@@ -57,7 +47,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://discord.gg/aryart"
+                href="https://discord.gg/2nvf93KQ"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-400"
