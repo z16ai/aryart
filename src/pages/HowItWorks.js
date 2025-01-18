@@ -76,7 +76,7 @@ export default function HowItWorks() {
       {/* CTA */}
       <div className="text-center mt-16">
         <Link
-          to="/create-collection"
+          to="/creating"
           className="inline-flex items-center rounded-md bg-gradient-to-r from-primary-600 to-secondary-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:from-primary-500 hover:to-secondary-500"
         >
           Start Creating

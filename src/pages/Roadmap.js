@@ -8,7 +8,7 @@ const phases = [
         main: 'Complete the MVP',
         sub: [
           'Connect Solana Wallet',
-          'Create artworks with AI Agent',
+          'Create artworks with AI Agents',
           'Upload artworks to the IPFS network for permanent storage',
           'Browse all the generated artworks'
         ]

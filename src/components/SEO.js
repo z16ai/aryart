@@ -2,8 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 export default function SEO({ 
-  title = 'AryArt - AI-Driven NFT Creation Platform',
-  description = 'Create, mint, and trade unique NFTs with AI technology on AryArt. Join our community of creators and collectors in the next generation of digital art.',
+  title = 'AryArt - AI-Powered NFT Creation Platform',
+  description = 'Create, mint, and trade unique NFTs with AI Agents on AryArt. Join our community of creators and collectors in the next generation of digital art.',
   image = '/images/aryart-logon.png',
   url = 'https://aryart.xyz'
 }) {
@@ -14,7 +14,7 @@ export default function SEO({
   const siteMetadata = {
     siteUrl: 'https://aryart.xyz',
     title: 'AryArt',
-    description: 'AI-Driven NFT Creation Platform',
+    description: 'AI-Powered NFT Creation Platform',
     image: '/images/aryart-logon.png',
     twitterUsername: '@AryArt_xyz',
   };

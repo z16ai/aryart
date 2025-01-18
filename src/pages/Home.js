@@ -90,7 +90,7 @@ export default function Home() {
   return (
     <>
       <SEO 
-        title="AryArt - Create Unique NFTs with AI Technology"
+        title="AryArt - Create Unique NFTs with AI Agents"
         description="Discover and create unique NFT collections powered by AI on AryArt. Mint, trade, and collect digital art in a vibrant community of creators."
       />
       <div className="space-y-32 mt-8">
