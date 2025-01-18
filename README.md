@@ -1,6 +1,10 @@
-# AryArt - AI-Driven NFT Platform
+# AryArt - AI-Powered NFT Platform
 
-AryArt is a modern NFT platform that leverages AI technology to create unique digital art collections. The platform uses the Vincentian graph AI model to generate and maintain stylistic consistency across collections.
+AryArt is a modern NFT platform that leverages AI Agents to create unique digital art collections. The platform uses the Vincentian graph AI model to generate and maintain stylistic consistency across collections.
+
+https://aryart.xyz
+https://x.com/aryart_xyz
+https://t.me/aryart_xyz
 
 ## Features
 
