@@ -10,6 +10,7 @@ const navigation = [
   { name: 'Explore', href: '/explore' },
   { name: 'How it Works', href: '/how-it-works' },
   { name: 'Roadmap', href: '/roadmap' },
+  { name: 'Docs', href: 'https://aryart.gitbook.io', target: '_blank', rel: 'noopener noreferrer' },
 ];
 
 export default function Navbar() {
@@ -43,6 +44,8 @@ export default function Navbar() {
             <Link
               key={item.name}
               to={item.href}
+              target={item.target}
+              rel={item.rel}
               className="text-sm font-semibold leading-6 text-white hover:text-primary-400"
             >
               {item.name}
@@ -89,6 +92,8 @@ export default function Navbar() {
                   <Link
                     key={item.name}
                     to={item.href}
+                    target={item.target}
+                    rel={item.rel}
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
                     onClick={() => setMobileMenuOpen(false)}
                   >
