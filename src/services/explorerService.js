@@ -23,17 +23,20 @@ export const fetchSpaceImages = async () => {
     const space = await client.currentSpace();
     console.log('Fetching uploads from space:', space.did());
     
-    // List all uploads in the space
+    // List all uploads in the space with pagination
     console.log('Listing uploads...');
-    const uploadList = await client.capability.upload.list();
-    console.log('Upload list:', uploadList);
+    const uploadList = await client.capability.upload.list({ size: 100 });
+    console.log('Total uploads found:', uploadList?.results?.length || 0);
 
     const images = [];
 
     // Process uploads from the results array
     if (uploadList && uploadList.results && Array.isArray(uploadList.results)) {
-      uploadList.results.slice(0, 100).forEach(upload => {
-        if (!upload || !upload.root) return;
+      for (const upload of uploadList.results) {
+        if (!upload || !upload.root) {
+          console.log('Skipping upload - missing data:', upload);
+          continue;
+        }
 
         try {
           const url = `https://${upload.root.toString()}.ipfs.w3s.link`;
@@ -45,14 +48,16 @@ export const fetchSpaceImages = async () => {
         } catch (err) {
           console.warn('Failed to process upload:', err);
         }
-      });
+      }
     }
 
-    // Sort by upload date and shuffle similar dates
+    console.log('Successfully processed images:', images.length);
+
+    // Sort by upload date
     images.sort((a, b) => b.uploadedAt - a.uploadedAt);
-    return shuffleArray(images);
+    return images;
   } catch (error) {
     console.error('Failed to fetch images:', error);
-    throw new Error(`Failed to fetch images: ${error.message}`);
+    throw new Error(error.message || 'Failed to fetch images');
   }
 };

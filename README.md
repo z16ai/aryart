@@ -2,9 +2,9 @@
 
 AryArt is a modern NFT platform that leverages AI Agents to create unique digital art collections. The platform uses the Vincentian graph AI model to generate and maintain stylistic consistency across collections.
 
-https://aryart.xyz
-https://x.com/aryart_xyz
-https://t.me/aryart_xyz
+https://aryart.xyz  
+https://x.com/aryart_xyz  
+https://t.me/aryart_xyz  
 
 ## Features
 

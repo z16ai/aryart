@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { fetchSpaceImages } from '../services/explorerService';
 
+const IMAGES_PER_PAGE = 30;
+
 const Explorer = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loadedImages, setLoadedImages] = useState(new Set());
 
   useEffect(() => {
     const loadImages = async () => {
@@ -12,10 +16,12 @@ const Explorer = () => {
         setLoading(true);
         setError(null);
         const fetchedImages = await fetchSpaceImages();
-        setImages(fetchedImages);
+        console.log('Total images fetched:', fetchedImages.length);
+        setImages(fetchedImages || []);
       } catch (err) {
         console.error('Failed to load images:', err);
-        setError('Failed to load images. Please try again later.');
+        setError(err.message || 'Failed to load images. Please try again later.');
+        setImages([]);
       } finally {
         setLoading(false);
       }
@@ -23,6 +29,16 @@ const Explorer = () => {
 
     loadImages();
   }, []);
+
+  const handleImageLoad = (cid) => {
+    setLoadedImages(prev => new Set([...prev, cid]));
+  };
+
+  // Calculate pagination
+  const totalPages = Math.ceil(images.length / IMAGES_PER_PAGE);
+  const startIndex = (currentPage - 1) * IMAGES_PER_PAGE;
+  const endIndex = startIndex + IMAGES_PER_PAGE;
+  const currentImages = images.slice(startIndex, endIndex);
 
   if (loading) {
     return (
@@ -42,18 +58,15 @@ const Explorer = () => {
     );
   }
 
-  // Calculate grid columns based on number of images
-  const getGridCols = () => {
-    if (images.length <= 2) return 'grid-cols-1 sm:grid-cols-2';
-    if (images.length <= 6) return 'grid-cols-2 sm:grid-cols-3';
-    if (images.length <= 12) return 'grid-cols-3 sm:grid-cols-4';
-    return 'grid-cols-4 sm:grid-cols-5 md:grid-cols-6';
-  };
-
   return (
     <div className="min-h-screen pt-16">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">Explore AryArt</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold">Explore AryArt</h1>
+          <p className="text-gray-400">
+            Showing {Math.min(startIndex + 1, images.length)}-{Math.min(endIndex, images.length)} of {images.length} images
+          </p>
+        </div>
         
         {images.length === 0 ? (
           <div className="flex items-center justify-center min-h-[400px] bg-gray-900 bg-opacity-50 rounded-lg">
@@ -65,25 +78,48 @@ const Explorer = () => {
             </div>
           </div>
         ) : (
-          <div className={`grid ${getGridCols()} gap-0`}>
-            {images.map((image) => (
-              <a
-                key={image.cid}
-                href={image.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative aspect-square group"
-              >
-                <img
-                  src={image.url}
-                  alt={`Art ${image.cid}`}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-              </a>
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-0">
+              {currentImages.map((image) => (
+                <a
+                  key={image.cid}
+                  href={image.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative block aspect-square overflow-hidden"
+                >
+                  <img
+                    src={image.url}
+                    alt={`Art ${image.cid}`}
+                    className="w-full h-full object-cover transition-transform duration-300 ease-out hover:scale-110"
+                    loading="lazy"
+                  />
+                </a>
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center space-x-4 mt-8">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700"
+                >
+                  Previous
+                </button>
+                <span className="text-gray-400">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
